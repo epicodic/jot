@@ -49,12 +49,6 @@ Edit a file:
 jot path/to/file.txt
 ```
 
-With no argument, edited text is written to stdout:
-
-```sh
-jot > note.txt
-```
-
 | Key     | Action          |
 |---------|-----------------|
 | Ctrl+S  | Save and exit   |
