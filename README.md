@@ -1,15 +1,14 @@
 # jot
 
-A tiny inline terminal editor for git commit messages and quick notes.
+A tiny inline terminal editor built specifically for git commit messages.
 
 Renders directly in the terminal scroll buffer — no full-screen takeover, no context switch.
 
 ## Features
 
 - Inline rendering: the editor appears in-place and the shell prompt returns below it when done
-- Blends with your terminal: queries the terminal background color via OSC 11 and matches it
 - Line numbers, soft wrap, and tab indentation out of the box
-- Exits with code 1 on cancel so git aborts the commit cleanly
+- Persists a commit message history and lets you cycle through or search past messages
 
 ## Installation
 
@@ -43,16 +42,29 @@ uv tool install .
 
 ## Usage
 
-Edit a file:
-
 ```sh
-jot path/to/file.txt
+jot path/to/COMMIT_EDITMSG
 ```
 
-| Key     | Action          |
-|---------|-----------------|
-| Ctrl+S  | Save and exit   |
-| Escape  | Cancel (exit 1) |
+| Key              | Action                          |
+|------------------|---------------------------------|
+| Ctrl+Enter       | Save and exit                   |
+| Escape           | Cancel                          |
+| Page Up          | Cycle to previous message       |
+| Page Down        | Cycle to next message           |
+| Ctrl+R           | Search history (type to filter) |
+| Enter (in search)| Apply top result and close      |
+| Escape (in search)| Close search, return to editor |
+
+## History
+
+Every message is saved to `~/.cache/jot/git_history.json` whether you save or
+cancel, so nothing is ever lost. Lines starting with `#` (git's own status
+comments) are never stored and are preserved in-place when applying a history
+entry.
+
+The search panel (Ctrl+R) filters the full history as you type. 
+Page Up / Page Down cycles through history entries.
 
 ## Use as `$GIT_EDITOR`
 
@@ -70,3 +82,6 @@ GIT_EDITOR=jot git commit
 
 - Python 3.12+
 - A terminal that supports OSC 11 (background color query) for seamless blending; falls back gracefully otherwise
+
+## License
+MIT License. See [LICENSE](LICENSE) for details.
