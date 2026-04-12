@@ -16,8 +16,22 @@ Renders directly in the terminal scroll buffer — no full-screen takeover, no c
 From a releases wheel (download from [GitHub Releases](https://github.com/epicodic/jot/releases)):
 
 ```sh
-pip install jot-*.whl
+pipx install jot-*.whl
 ```
+As a one-liner (requires `jq`):
+
+> [!TIP]
+> With pipx:
+> ```sh
+> pipx install $(curl -s https://api.github.com/repos/epicodic/jot/releases/latest \
+>   | jq -r '.assets[] | select(.name | endswith(".whl")) | .browser_download_url')
+> ```
+> 
+> With uv:
+> ```sh
+> uv tool install $(curl -s https://api.github.com/repos/epicodic/jot/releases/latest \
+>   | jq -r '.assets[] | select(.name | endswith(".whl")) | .browser_download_url')
+> ```
 
 Or from source:
 
