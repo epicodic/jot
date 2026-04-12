@@ -124,9 +124,6 @@ def main() -> None:
     app = JotApp(filepath, initial_text, bg_color)
     app.run(inline=True)
 
-    if not app.saved:
-        sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
