@@ -157,8 +157,8 @@ class JotApp(App[None]):
     INLINE_PADDING = 0  # suppress the default blank line Textual adds above inline apps
 
     BINDINGS = [
-        Binding("ctrl+enter", "save", "Save"),
-        Binding("ctrl+r", "search", "Search history"),
+        Binding("ctrl+s", "save", "Save", priority=True, show=True),
+        Binding("ctrl+r", "search", "Search history", priority=True, show=True),
         Binding("escape", "quit_cancel", "Cancel", priority=True, show=True),
         Binding("pageup", "history_prev", "Prev msg", priority=True, show=True),
         Binding("pagedown", "history_next", "Next msg", priority=True, show=True),
