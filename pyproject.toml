@@ -41,7 +41,7 @@ jot = "jot.main:main"
 dev = ["pytest>=8.4.2", "ruff>=0.13.0", "ty>=0.0.26"]
 
 [build-system]
-requires = ["uv_build>=0.11.6,<0.12"]
+requires = ["uv_build>=0.11.6,<0.13"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
