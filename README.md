@@ -1,7 +1,7 @@
 # jot
 
-[![PyPI](https://img.shields.io/pypi/v/jot-editor)](https://pypi.org/project/jot-editor/)
-[![Python versions](https://img.shields.io/pypi/pyversions/jot-editor)](https://pypi.org/project/jot-editor/)
+[![PyPI](https://img.shields.io/pypi/v/jot-editor?cacheSeconds=3600)](https://pypi.org/project/jot-editor/)
+[![Python versions](https://img.shields.io/pypi/pyversions/jot-editor?cacheSeconds=3600)](https://pypi.org/project/jot-editor/)
 [![CI](https://github.com/epicodic/jot/actions/workflows/ci.yml/badge.svg)](https://github.com/epicodic/jot/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/epicodic/jot/blob/main/LICENSE)
 
