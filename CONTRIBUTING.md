@@ -42,8 +42,8 @@ are stored in the repository.
    ```
 
 The workflow runs CI and checks that the tag matches the `pyproject.toml`
-version. It then builds the package, uploads it to TestPyPI and then PyPI, and
-creates a GitHub release with the built files attached.
+version. It then builds the package, uploads it to PyPI, and creates a GitHub
+release with the built files attached.
 
 ### One-time setup
 
@@ -55,9 +55,6 @@ Do this once, before the first release:
    - Owner: `epicodic`, Repository: `jot`
    - Workflow name: `publish.yml`
    - Environment name: `pypi`
-2. Do the same on [TestPyPI](https://test.pypi.org/manage/account/publishing/),
-   with the environment name `testpypi`. TestPyPI needs its own account.
-3. In the GitHub repository, go to **Settings → Environments** and create the
-   environments `pypi` and `testpypi`. For `pypi`, it's a good idea to add
-   yourself as a required reviewer, so every release waits for a manual
-   approval.
+2. In the GitHub repository, go to **Settings → Environments** and create the
+   environment `pypi`. It's a good idea to add yourself as a required
+   reviewer, so every release waits for a manual approval.
