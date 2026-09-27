@@ -90,8 +90,10 @@ def test_history_cycling_preserves_comments_and_restores_draft() -> None:
     app = JotApp(None, "draft" + TEMPLATE, bg_color=None)
 
     async def drive() -> None:
+        def text() -> str:
+            return app.query_one(TextArea).text
+
         async with app.run_test() as pilot:
-            text = lambda: app.query_one(TextArea).text  # noqa: E731
             await pilot.press("pageup")
             assert text() == "new" + TEMPLATE.rstrip("\n")
             await pilot.press("pageup")
