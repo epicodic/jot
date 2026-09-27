@@ -10,5 +10,6 @@ wheels/
 .venv
 
 # Tool caches
+.serena/
 .pytest_cache/
 .ruff_cache/
