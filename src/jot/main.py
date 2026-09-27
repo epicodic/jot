@@ -11,9 +11,10 @@ import sys
 import termios
 import tty
 from pathlib import Path
+from typing import ClassVar
 
 from textual.app import App, ComposeResult, format_key
-from textual.binding import Binding
+from textual.binding import Binding, BindingType
 from textual.message import Message
 from textual.widgets import Footer, Input, TextArea
 from textual_autocomplete import AutoComplete, DropdownItem, TargetState
@@ -161,7 +162,7 @@ class JotApp(App[str]):
 
     INLINE_PADDING = 0  # suppress the default blank line Textual adds above inline apps
 
-    BINDINGS = [
+    BINDINGS: ClassVar[list[BindingType]] = [
         Binding("ctrl+s", "save", "Save", priority=True, show=True),
         Binding("ctrl+r", "search", "Search history", priority=True, show=True),
         Binding("escape", "quit_cancel", "Cancel", priority=True, show=True),
