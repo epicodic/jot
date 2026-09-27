@@ -1,20 +1,51 @@
 [project]
-name = "jot"
-version = "0.1.0"
-description = "Tiny inline editor for git commit messages and quick notes."
+name = "jot-editor"
+version = "0.2.0"
+description = "Tiny inline terminal editor for git commit messages, with message history and search."
 readme = "README.md"
 requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "epicodic" }]
+keywords = ["git", "commit", "editor", "terminal", "tui", "textual", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: Text Editors",
+    "Typing :: Typed",
+]
 dependencies = [
     "textual>=8.2.3",
     "textual-autocomplete>=4.0.0",
 ]
 
-[dependency-groups]
-dev = ["pytest>=8.4.2", "ruff>=0.13.0", "ty>=0.0.26"]
+[project.urls]
+Homepage = "https://github.com/epicodic/jot"
+Source = "https://github.com/epicodic/jot"
+Issues = "https://github.com/epicodic/jot/issues"
+Changelog = "https://github.com/epicodic/jot/blob/main/CHANGELOG.md"
 
 [project.scripts]
 jot = "jot.main:main"
 
+[dependency-groups]
+dev = ["pytest>=8.4.2", "ruff>=0.13.0", "ty>=0.0.26"]
+
 [build-system]
-requires = ["uv_build"]
+requires = ["uv_build>=0.11.6,<0.12"]
 build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "jot"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
