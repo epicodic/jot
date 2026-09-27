@@ -18,20 +18,23 @@ from textual.message import Message
 from textual.widgets import Footer, Input, TextArea
 from textual_autocomplete import AutoComplete, DropdownItem, TargetState
 
+from jot import __version__
+
 GIT_HISTORY_FILE = Path.home() / ".cache" / "jot" / "git_history.json"
 MAX_HISTORY = 100
 
 
 def get_terminal_background() -> str | None:
     """Query terminal background color via OSC 11. Returns hex string like '#1e1e1e' or None."""
-    if not sys.stdin.isatty():
+    # Textual draws on stderr, so query there too; stdout may be redirected.
+    if not (sys.stdin.isatty() and sys.stderr.isatty()):
         return None
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     try:
         tty.setraw(fd)
-        sys.stdout.write("\033]11;?\007")
-        sys.stdout.flush()
+        sys.stderr.write("\033]11;?\007")
+        sys.stderr.flush()
         chunks: list[bytes] = []
         timeout = 0.2  # longer wait for first chunk
         while select.select([fd], [], [], timeout)[0]:
@@ -128,8 +131,10 @@ class HistoryAutoComplete(AutoComplete):
         # Don't call super() — the app handles applying the text to the TextArea.
 
 
-class JotApp(App[None]):
+class JotApp(App[str]):
     """Inline Textual editor for git commit messages."""
+
+    TITLE = "jot"
 
     # {bg_color} is substituted at runtime with the detected terminal background.
     CSS = """
@@ -170,7 +175,6 @@ class JotApp(App[None]):
         self.filepath = filepath
         self.initial_text = initial_text
         self.bg_color = bg_color
-        self.saved = False
         # Inject the background color before Textual parses the CSS.
         self.CSS = self.CSS.replace("{bg_color}", bg_color or "transparent")
         self.git_history = load_git_history()
@@ -268,15 +272,12 @@ class JotApp(App[None]):
     # ── Save / cancel ─────────────────────────────────────────────────────────
 
     def action_save(self) -> None:
-        """Write the edited text and exit with success."""
+        """Write the edited text and exit, returning the text as the app result."""
         text = self.query_one(TextArea).text
         save_to_git_history(text)
         if self.filepath:
             self.filepath.write_text(text)
-        else:
-            sys.stdout.write(text)
-        self.saved = True
-        self.exit()
+        self.exit(text)
 
     def action_quit_cancel(self) -> None:
         """Escape: close search if open, otherwise cancel the editor."""
@@ -289,19 +290,31 @@ class JotApp(App[None]):
 
 def main() -> None:
     """Entry point. Detects terminal background, opens the editor, exits 1 on cancel."""
-    bg_color = get_terminal_background()
-
     parser = argparse.ArgumentParser(
-        description="Tiny inline git commit editor — Ctrl+S to save, Esc to cancel"
+        prog="jot",
+        description="Tiny inline git commit editor — Ctrl+S to save, Esc to cancel",
     )
-    parser.add_argument("file", nargs="?", help="File to edit (git commit message)")
+    parser.add_argument(
+        "file",
+        nargs="?",
+        help="file to edit (e.g. .git/COMMIT_EDITMSG); without it the text is printed to stdout",
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
     args = parser.parse_args()
 
     filepath = Path(args.file) if args.file else None
     initial_text = filepath.read_text() if filepath and filepath.exists() else ""
+    bg_color = get_terminal_background()
 
     app = JotApp(filepath, initial_text, bg_color)
-    app.run(inline=True)
+    result = app.run(inline=True)
+    if result is None:
+        # A non-zero exit makes git abort the commit instead of using the old message.
+        sys.exit(1)
+    if filepath is None:
+        sys.stdout.write(result)
 
 
 if __name__ == "__main__":
